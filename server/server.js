@@ -1,14 +1,24 @@
-const { Console } = require('console');
 const express = require('express');
-const app = express();
 const path = require('path');
+const app = express();
 const port = 8080;
 
-let publicpath = path.join(__dirname, 'public');
-app.use(express.static(`${publicpath}`));
+// Caminho para a pasta "app"
+const publicpath = path.join(__dirname, 'app');
+console.log('Caminho para a pasta app:', publicpath);
 
-app.get('/', (req, res) =>{
-    res.sendFile(`${publicpath}/index.html`);
-})
+// Servir arquivos estáticos (CSS, JS, imagens, etc.)
+app.use('/app', express.static(publicpath));
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`)) 
+const imagePath = path.join(__dirname, 'public', 'imagens');
+app.use('/imagens', express.static(imagePath));
+
+// Rota para a página inicial
+app.get('/', (req, res) => {
+    res.sendFile(path.join(publicpath, 'index.html'));
+});
+
+// Iniciar o servidor
+app.listen(port, () => {
+    console.log(`Servidor rodando em http://localhost:${port}`);
+});
